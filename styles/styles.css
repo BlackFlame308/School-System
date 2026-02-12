@@ -147,10 +147,11 @@ table td:hover {
 
 .data-input {
     padding: 10px;
-    margin: 5px;
+    margin: 5px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 30em;
+    width: 520px;
+    max-width: 100%;
 }
 
 .data-input:focus {
@@ -169,4 +170,131 @@ table td:hover {
 .school-select:focus {
     outline: none;
     border-color: #ccc;
+}
+
+/* Form layout improvements: align labels and inputs */
+form table {
+    width: 100%;
+    max-width: 900px;
+}
+
+form td {
+    vertical-align: middle;
+    padding: 8px 6px;
+}
+
+form td:first-child {
+    width: 12em;
+    text-align: right;
+    padding-right: 12px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+form .data-input,
+form .school-select,
+form .department-select,
+form .program-select {
+    margin: 0;
+    width: 100%;
+    max-width: 520px;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+form .data-input::placeholder {
+    color: #6b7280;
+    opacity: 1;
+}
+
+@media (max-width: 700px) {
+    form td:first-child {
+        width: auto;
+        text-align: left;
+        display: block;
+        padding-bottom: 6px;
+    }
+    form td:last-child {
+        display: block;
+    }
+}
+
+/* Ensure inputs, selects and textareas align text and placeholders consistently */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    text-align: left;
+    line-height: 1.4;
+    vertical-align: middle;
+}
+
+/* Placeholder alignment and style */
+/* Placeholder alignment and style */
+input::placeholder,
+textarea::placeholder,
+.data-input::placeholder,
+.school-select::placeholder,
+select::placeholder,
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    text-align: left;
+    color: #6b7280;
+    opacity: 1;
+}
+::-moz-placeholder { /* Firefox 19+ */
+    text-align: left;
+    color: #6b7280;
+    opacity: 1;
+}
+:-ms-input-placeholder { /* IE 10+ */
+    text-align: left;
+    color: #6b7280;
+    opacity: 1;
+}
+::-ms-input-placeholder { /* Edge */
+    text-align: left;
+    color: #6b7280;
+    opacity: 1;
+}
+::placeholder {
+    text-align: left;
+    color: #6b7280;
+    opacity: 1;
+}
+
+/* Improve table readability */
+/* Remove visible table borders and backgrounds site-wide */
+table, th, td {
+    border: none !important;
+    background: transparent !important;
+    text-align: left !important;
+}
+
+table tr:nth-child(even) {
+    background-color: transparent;
+}
+
+table tr:hover {
+    background-color: transparent;
+}
+
+table th {
+    background-color: transparent;
+}
+
+/* Hide table gridlines inside forms so form layout looks like a form, not a table */
+form table,
+form th,
+form td {
+    border: none !important;
+    background: transparent !important;
+    padding: 6px 4px !important;
+}
+
+/* Keep data tables styled — target explicitly if needed with .data-table */
+.data-table th, .data-table td {
+    border: none;
+    padding: 10px;
 }

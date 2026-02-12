@@ -52,23 +52,39 @@ if($_POST && isset($_POST['saveNewSchoolEntry'])){
     }
 
     if(empty($_SESSION['errors']['schoolID']) && empty($_SESSION['errors']['schoolFullName']) && empty($_SESSION['errors']['schoolShortName'])){
-        $dbStatement = $db->prepare("INSERT INTO colleges (collid, collfullname, collshortname) VALUES (:collid, :collfullname, :collshortname)");
-        $dbResult = $dbStatement->execute([
-            'collid' => $schoolID,
-            'collfullname' => $schoolFullName,
-            'collshortname' => $schoolShortName
-        ]);
+        // Check for duplicate collid
+        try {
+            $checkStmt = $db->prepare("SELECT COUNT(*) FROM colleges WHERE collid = ?");
+            $checkStmt->execute([$schoolID]);
+            if ($checkStmt->fetchColumn() > 0) {
+                $_SESSION['errors']['schoolID'] = "School ID already exists";
+                $_SESSION['messages']['createError'] = "School ID already exists. Use a different ID.";
+                header("Location: $entryURL", true, 301);
+                exit;
+            }
 
-        if($dbResult){
-            $_SESSION['messages']['createSuccess'] = "School entry created successfully";
-            $_SESSION['messages']['createError'] = "";
-        } else {
-            $_SESSION['messages']['createError'] = "Failed to create school entry";
-            $_SESSION['messages']['createSuccess'] = "";
-        }        
+            $dbStatement = $db->prepare("INSERT INTO colleges (collid, collfullname, collshortname) VALUES (:collid, :collfullname, :collshortname)");
+            $dbResult = $dbStatement->execute([
+                'collid' => $schoolID,
+                'collfullname' => $schoolFullName,
+                'collshortname' => $schoolShortName
+            ]);
+
+            if($dbResult){
+                $_SESSION['messages']['createSuccess'] = "School entry created successfully";
+                $_SESSION['messages']['createError'] = "";
+            } else {
+                $_SESSION['messages']['createError'] = "Failed to create school entry";
+                $_SESSION['messages']['createSuccess'] = "";
+            }
+        } catch (PDOException $e) {
+            $_SESSION['messages']['createError'] = "Database error: " . $e->getMessage();
+        }
 
         header("Location: $entryURL", true, 301);
+        exit;
     } else {
         header("Location: $entryURL", true, 301);
+        exit;
     }
 }
